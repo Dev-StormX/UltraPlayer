@@ -1,110 +1,564 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <title>UltraPlayer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UltraPlayer - Advanced Video Player for Android</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-color: #ffffff;
+            --card-bg: #f8fafc;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        * {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0f172a;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background-color: var(--bg-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .app-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .app-icon i {
+            font-size: 50px;
+            color: var(--primary-color);
+        }
+        
+        .app-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .app-title p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+        
+        .app-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .stars {
+            color: #fbbf24;
+        }
+        
+        .details-container {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .detail-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid var(--accent-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .detail-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+        
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .detail-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(37, 99, 235, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .detail-icon i {
+            color: var(--primary-color);
+            font-size: 20px;
+        }
+        
+        .detail-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .detail-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+        
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .highlight {
+            color: var(--success-color);
+            font-weight: 700;
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background-color: var(--success-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .buttons-container {
+            padding: 0 30px 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 250px;
             text-align: center;
         }
-        .box {
-            background: #1e293b;
+        
+        .download-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .download-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+        }
+        
+        .telegram-btn {
+            background-color: #0088cc;
+            color: white;
+        }
+        
+        .telegram-btn:hover {
+            background-color: #0077b5;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 136, 204, 0.2);
+        }
+        
+        .playstore-btn {
+            background-color: #0f9d58;
+            color: white;
+        }
+        
+        .playstore-btn:hover {
+            background-color: #0d8c4d;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(15, 157, 88, 0.2);
+        }
+        
+        .features-section {
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,.4);
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            margin-top: 30px;
         }
-        h1 {
-            margin-bottom: 10px;
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--text-primary);
+            position: relative;
+            padding-bottom: 10px;
         }
-        p {
-            opacity: .8;
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-icon {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-top: 3px;
+        }
+        
+        .feature-text h4 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .feature-text p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .app-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .app-title h1 {
+                font-size: 2rem;
+            }
+            
+            .details-container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+                padding: 0 20px 20px;
+            }
+            
+            .action-btn {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <div class="app-header">
+            <div class="app-icon">
+                <i class="fas fa-play-circle"></i>
+            </div>
+            <div class="app-title">
+                <h1>UltraPlayer</h1>
+                <p>Advanced video player with support for all formats, hardware acceleration, and customizable playback controls.</p>
+                <div class="app-rating">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <span>4.7 (12,458 reviews)</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="details-container">
+            <div class="detail-card">
+                <div class="detail-header">
+                    <div class="detail-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <h3>App Information</h3>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-item">
+                        <span class="detail-label">Last Update</span>
+                        <span class="detail-value">2025/01/30</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Version</span>
+                        <span class="detail-value"><span class="version-badge">2.0.6</span></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">File Size</span>
+                        <span class="detail-value">20 MB</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Downloads</span>
+                        <span class="detail-value highlight">1M+</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-header">
+                    <div class="detail-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Requirements</h3>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-item">
+                        <span class="detail-label">Android Version</span>
+                        <span class="detail-value">8.0 (Oreo) and above</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">RAM</span>
+                        <span class="detail-value">2 GB minimum</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Storage</span>
+                        <span class="detail-value">50 MB free space</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Permissions</span>
+                        <span class="detail-value">Storage, Network</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-header">
+                    <div class="detail-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <h3>Content & Category</h3>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-item">
+                        <span class="detail-label">Category</span>
+                        <span class="detail-value">Video Players</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Content Rating</span>
+                        <span class="detail-value">Rated for 3+ years</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Developer</span>
+                        <span class="detail-value">UltraTech Studios</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">In-app Purchases</span>
+                        <span class="detail-value">No</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="buttons-container">
+            <a href="https://play.google.com/store/apps/details?id=com.snapmate" class="action-btn download-btn" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-download"></i>
+                Download APK
+            </a>
+            
+            <a href="https://play.google.com/store/apps/details?id=com.snapmate" class="action-btn playstore-btn" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-google-play"></i>
+                Get on Google Play
+            </a>
+            
+            <a href="https://t.me/ultraplayer_channel" class="action-btn telegram-btn" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-telegram"></i>
+                Join Telegram Channel
+            </a>
+        </div>
+        
+        <div class="features-section">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h4>All Format Support</h4>
+                        <p>Plays MP4, MKV, AVI, MOV, FLV, 3GP, and more without conversion.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Hardware Acceleration</h4>
+                        <p>Uses hardware decoding for smooth playback and lower battery consumption.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-closed-captioning"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Subtitle Support</h4>
+                        <p>Load external subtitles (SRT, SUB, ASS) and customize font, size, and color.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Playback Speed Control</h4>
+                        <p>Adjust speed from 0.5x to 4.0x for faster or slower viewing.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-expand-alt"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Gesture Controls</h4>
+                        <p>Swipe for brightness, volume, and seek with intuitive gesture support.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Dark Mode</h4>
+                        <p>Full dark theme for comfortable nighttime viewing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 UltraPlayer. All rights reserved. This is a fan site for educational purposes.</p>
+            <p>UltraPlayer is a trademark of UltraTech Studios. Google Play and the Google Play logo are trademarks of Google LLC.</p>
+        </footer>
+    </div>
 
-<h2 style="text-align: right;">UltraPlayer</h2>
-<div class="details-container">
-
-  <div class="detail-item">
-    <svg aria-hidden="true" style="width: 20px;" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg">
-      <path d="M240.5 224H352C365.3 224 377.3 232.3 381.1 244.7C386.6 257.2 383.1 271.3 373.1 280.1L117.1 504.1C105.8 513.9 89.27 514.7 77.19 505.9C65.1 497.1 60.7 481.1 66.59 467.4L143.5 288H31.1C18.67 288 6.733 279.7 2.044 267.3C-2.645 254.8 .8944 240.7 10.93 231.9L266.9 7.918C278.2-1.92 294.7-2.669 306.8 6.114C318.9 14.9 323.3 30.87 317.4 44.61L240.5 224z" fill="var(--lLinkB)"></path>
-    </svg>
-    <span>Update:</span>
-    <span>2025/01/30</span>
-  </div>
-
-  <div class="detail-item">
-    <svg style="width: 20px;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <g>
-        <circle cx="17.47857" cy="17.49096" fill="var(--lLinkB)" r="4.5"></circle>
-        <circle cx="6.50904" cy="6.52143" fill="var(--lLinkB)" r="4.5"></circle>
-        <circle cx="5.00904" cy="18.99096" fill="var(--lLinkB)" r="3"></circle>
-        <circle cx="18.99096" cy="5.00904" fill="var(--lLinkB)" r="3"></circle>
-      </g>
-    </svg>
-    <span>Version:</span>
-    <span>2.0.6</span>
-  </div>
-
-  <div class="detail-item">
-    <svg aria-hidden="true" style="width: 20px;" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-      <path d="M480 288H32c-17.62 0-32 14.38-32 32v128c0 17.62 14.38 32 32 32h448c17.62 0 32-14.38 32-32v-128C512 302.4 497.6 288 480 288zM352 408c-13.25 0-24-10.75-24-24s10.75-24 24-24s24 10.75 24 24S365.3 408 352 408zM416 408c-13.25 0-24-10.75-24-24s10.75-24 24-24s24 10.75 24 24S429.3 408 416 408zM480 32H32C14.38 32 0 46.38 0 64v128c0 17.62 14.38 32 32 32h448c17.62 0 32-14.38 32-32V64C512 46.38 497.6 32 480 32zM352 152c-13.25 0-24-10.75-24-24S338.8 104 352 104S376 114.8 376 128S365.3 152 352 152zM416 152c-13.25 0-24-10.75-24-24S402.8 104 416 104S440 114.8 440 128S429.3 152 416 152z" fill="var(--lLinkB)"></path>
-    </svg>
-    <span>Size:</span>
-    <span>20 MB</span>
-  </div>
-
-  <div class="detail-item">
-    <svg aria-hidden="true" style="width: 20px;" viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg">
-      <path d="M420.5 301.9a24 24 0 1 1 24-24 24 24 0 0 1 -24 24m-265.1 0a24 24 0 1 1 24-24 24 24 0 0 1 -24 24m273.7-144.5 47.94-83a10 10 0 1 0 -17.27-10h0l-48.54 84.07a301.3 301.3 0 0 0 -246.6 0L116.2 64.45a10 10 0 1 0 -17.27 10h0l47.94 83C64.53 202.2 8.24 285.5 0 384H576c-8.24-98.45-64.54-181.8-146.9-226.6" fill="var(--lLinkB)"></path>
-    </svg>
-    <span>Requirements:</span>
-    <span>Android 8.0+</span>
-  </div>
-
-  <div class="detail-item">
-    <svg aria-hidden="true" style="width: 20px;" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z" fill="var(--lLinkB)"></path>
-    </svg>
-    <span>Category:</span>
-    <span>Video Players</span>
-  </div>
-
-  <div class="detail-item">
-    <svg style="width: 20px;" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-      <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="var(--lLinkB)"></path>
-    </svg>
-    <span>Play Store:</span>
-    <span><a href="https://play.google.com/store/apps/details?id=com.snapmate" target="_blank" rel="noopener noreferrer nofollow">Open</a></span>
-  </div>
-
-  <div class="buttons">
-    <a class="download-btn" href="https://play.google.com/store/apps/details?id=com.snapmate" target="_blank" rel="noopener noreferrer nofollow">
-      <svg aria-hidden="true" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
-        <path d="M448 416v-64c0-17.67-14.33-32-32-32s-32 14.33-32 32v64c0 17.67-14.33 32-32 32H96c-17.67 0-32-14.33-32-32v-64c0-17.67-14.33-32-32-32s-32 14.33-32 32v64c0 53.02 42.98 96 96 96h256C405 512 448 469 448 416zM246.6 342.6l128-128c12.51-12.51 12.49-32.76 0-45.25c-12.5-12.5-32.75-12.5-45.25 0L256 242.8V32c0-17.69-14.31-32-32-32S192 14.31 192 32v210.8L118.6 169.4c-12.5-12.5-32.75-12.5-45.25 0s-12.5 32.75 0 45.25l128 128C213.9 355.1 234.1 355.1 246.6 342.6z" fill="currentColor"></path>
-      </svg>
-      Download
-    </a>
-
-    <a class="telegram-btn" href="https://play.google.com/store/apps/details?id=com.snapmate" target="_blank" rel="noopener noreferrer nofollow">
-      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-        <path d="M29.919 6.163l-4.225 19.925c-0.319 1.406-1.15 1.756-2.331 1.094l-6.438-4.744-3.106 2.988c-0.344 0.344-0.631 0.631-1.294 0.631l0.463-6.556 11.931-10.781c0.519-0.462-0.113-0.719-0.806-0.256l-14.75 9.288-6.35-1.988c-1.381-0.431-1.406-1.381 0.288-2.044l24.837-9.569c1.15-0.431 2.156 0.256 1.781 2.013z" fill="currentColor"></path>
-      </svg>
-      Join Telegram Channel
-    </a>
-  </div>
-
-</div>
-
+    <script>
+        // Simple animation for version badge
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.version-badge');
+            if (badge) {
+                badge.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1)';
+                });
+                badge.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            }
+            
+            // Add animation to detail cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.detail-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s, transform 0.5s';
+                observer.observe(card);
+            });
+        });
+    </script>
 </body>
 </html>
