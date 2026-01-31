@@ -1,564 +1,208 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UltraPlayer - Advanced Video Player for Android</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --accent-color: #3b82f6;
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --bg-color: #ffffff;
-            --card-bg: #f8fafc;
-            --border-color: #e5e7eb;
-            --success-color: #10b981;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-        
-        body {
-            background-color: #f1f5f9;
-            color: var(--text-primary);
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .container {
-            background-color: var(--bg-color);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-        
-        .app-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 30px;
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            flex-wrap: wrap;
-        }
-        
-        .app-icon {
-            width: 100px;
-            height: 100px;
-            background: white;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .app-icon i {
-            font-size: 50px;
-            color: var(--primary-color);
-        }
-        
-        .app-title h1 {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-        
-        .app-title p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            max-width: 600px;
-        }
-        
-        .app-rating {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .stars {
-            color: #fbbf24;
-        }
-        
-        .details-container {
-            padding: 30px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-        
-        .detail-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            border-left: 4px solid var(--accent-color);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .detail-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow);
-        }
-        
-        .detail-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-        
-        .detail-icon {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(37, 99, 235, 0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .detail-icon i {
-            color: var(--primary-color);
-            font-size: 20px;
-        }
-        
-        .detail-header h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        
-        .detail-content {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .detail-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
-        }
-        
-        .detail-item:last-child {
-            border-bottom: none;
-        }
-        
-        .detail-label {
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-        
-        .detail-value {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        
-        .highlight {
-            color: var(--success-color);
-            font-weight: 700;
-        }
-        
-        .version-badge {
-            display: inline-block;
-            background-color: var(--success-color);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        
-        .buttons-container {
-            padding: 0 30px 30px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .action-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 16px 28px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            text-decoration: none;
-            transition: all 0.3s;
-            flex: 1;
-            min-width: 250px;
-            text-align: center;
-        }
-        
-        .download-btn {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .download-btn:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
-        }
-        
-        .telegram-btn {
-            background-color: #0088cc;
-            color: white;
-        }
-        
-        .telegram-btn:hover {
-            background-color: #0077b5;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 136, 204, 0.2);
-        }
-        
-        .playstore-btn {
-            background-color: #0f9d58;
-            color: white;
-        }
-        
-        .playstore-btn:hover {
-            background-color: #0d8c4d;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(15, 157, 88, 0.2);
-        }
-        
-        .features-section {
-            padding: 30px;
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            margin-top: 30px;
-        }
-        
-        .section-title {
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            color: var(--text-primary);
-            position: relative;
-            padding-bottom: 10px;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background-color: var(--primary-color);
-            border-radius: 2px;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        
-        .feature-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            padding: 15px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-        
-        .feature-icon {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            margin-top: 3px;
-        }
-        
-        .feature-text h4 {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-        
-        .feature-text p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 25px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--border-color);
-            margin-top: 30px;
-        }
-        
-        @media (max-width: 768px) {
-            .app-header {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
-            
-            .app-title h1 {
-                font-size: 2rem;
-            }
-            
-            .details-container {
-                grid-template-columns: 1fr;
-                padding: 20px;
-            }
-            
-            .buttons-container {
-                flex-direction: column;
-                padding: 0 20px 20px;
-            }
-            
-            .action-btn {
-                min-width: 100%;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="app-header">
-            <div class="app-icon">
-                <i class="fas fa-play-circle"></i>
-            </div>
-            <div class="app-title">
-                <h1>UltraPlayer</h1>
-                <p>Advanced video player with support for all formats, hardware acceleration, and customizable playback controls.</p>
-                <div class="app-rating">
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <span>4.7 (12,458 reviews)</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="details-container">
-            <div class="detail-card">
-                <div class="detail-header">
-                    <div class="detail-icon">
-                        <i class="fas fa-info-circle"></i>
-                    </div>
-                    <h3>App Information</h3>
-                </div>
-                <div class="detail-content">
-                    <div class="detail-item">
-                        <span class="detail-label">Last Update</span>
-                        <span class="detail-value">2025/01/30</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Version</span>
-                        <span class="detail-value"><span class="version-badge">2.0.6</span></span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">File Size</span>
-                        <span class="detail-value">20 MB</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Downloads</span>
-                        <span class="detail-value highlight">1M+</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="detail-card">
-                <div class="detail-header">
-                    <div class="detail-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Requirements</h3>
-                </div>
-                <div class="detail-content">
-                    <div class="detail-item">
-                        <span class="detail-label">Android Version</span>
-                        <span class="detail-value">8.0 (Oreo) and above</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">RAM</span>
-                        <span class="detail-value">2 GB minimum</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Storage</span>
-                        <span class="detail-value">50 MB free space</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Permissions</span>
-                        <span class="detail-value">Storage, Network</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="detail-card">
-                <div class="detail-header">
-                    <div class="detail-icon">
-                        <i class="fas fa-folder-open"></i>
-                    </div>
-                    <h3>Content & Category</h3>
-                </div>
-                <div class="detail-content">
-                    <div class="detail-item">
-                        <span class="detail-label">Category</span>
-                        <span class="detail-value">Video Players</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Content Rating</span>
-                        <span class="detail-value">Rated for 3+ years</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Developer</span>
-                        <span class="detail-value">StormX</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">In-app Purchases</span>
-                        <span class="detail-value">No</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="buttons-container">
-            <a href="https://play.google.com/store/apps/details?id=com.snapmate" class="action-btn download-btn" target="_blank" rel="noopener noreferrer">
-                <i class="fas fa-download"></i>
-                Download APK
-            </a>
-            
-            <a href="https://play.google.com/store/apps/details?id=com.snapmate" class="action-btn playstore-btn" target="_blank" rel="noopener noreferrer">
-                <i class="fab fa-google-play"></i>
-                Get on Google Play
-            </a>
-            
-            <a href="https://t.me/ultraplayer_channel" class="action-btn telegram-btn" target="_blank" rel="noopener noreferrer">
-                <i class="fab fa-telegram"></i>
-                Join Telegram Channel
-            </a>
-        </div>
-        
-        <div class="features-section">
-            <h2 class="section-title">Key Features</h2>
-            <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-film"></i>
-                    </div>
-                    <div class="feature-text">
-                        <h4>All Format Support</h4>
-                        <p>Plays MP4, MKV, AVI, MOV, FLV, 3GP, and more without conversion.</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <div class="feature-text">
-                        <h4>Hardware Acceleration</h4>
-                        <p>Uses hardware decoding for smooth playback and lower battery consumption.</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-closed-captioning"></i>
-                    </div>
-                    <div class="feature-text">
-                        <h4>Subtitle Support</h4>
-                        <p>Load external subtitles (SRT, SUB, ASS) and customize font, size, and color.</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div class="feature-text">
-                        <h4>Playback Speed Control</h4>
-                        <p>Adjust speed from 0.5x to 4.0x for faster or slower viewing.</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-expand-alt"></i>
-                    </div>
-                    <div class="feature-text">
-                        <h4>Gesture Controls</h4>
-                        <p>Swipe for brightness, volume, and seek with intuitive gesture support.</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-moon"></i>
-                    </div>
-                    <div class="feature-text">
-                        <h4>Dark Mode</h4>
-                        <p>Full dark theme for comfortable nighttime viewing.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>© 2025 UltraPlayer. All rights reserved. This is a fan site for educational purposes.</p>
-            <p>Google Play and the Google Play logo are trademarks of Google LLC.</p>
-        </footer>
-    </div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultra Player</title>
 
-    <script>
-        // Simple animation for version badge
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.version-badge');
-            if (badge) {
-                badge.addEventListener('mouseenter', function() {
-                    this.style.transform = 'scale(1.1)';
-                });
-                badge.addEventListener('mouseleave', function() {
-                    this.style.transform = 'scale(1)';
-                });
-            }
-            
-            // Add animation to detail cards on scroll
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, observerOptions);
-            
-            document.querySelectorAll('.detail-card').forEach(card => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                card.style.transition = 'opacity 0.5s, transform 0.5s';
-                observer.observe(card);
-            });
-        });
-    </script>
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* === SAME STYLE – UNCHANGED === */
+:root{
+  --bg:#F7FAFD;
+  --card:#F2F5FB;
+  --accent:#005DE9;
+  --text:#000000;
+  --muted:#444746;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Sora',system-ui}
+body{
+  background:radial-gradient(circle at top,var(--card),var(--bg));
+  color:var(--text);
+}
+header{
+  padding:16px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+header h1{font-size:18px;font-weight:600}
+nav a{
+  color:var(--muted);
+  text-decoration:none;
+  margin-left:16px;
+  font-size:14px;
+}
+nav a:hover{color:var(--accent);}
+.hero{text-align:center;padding:60px 20px}
+.badge{
+  display:inline-block;
+  background:#cfe1fe;
+  color:var(--accent);
+  padding:8px 16px;
+  border-radius:999px;
+  margin-bottom:30px;
+  font-weight:500;
+}
+.logo{
+  width:140px;height:140px;border-radius:50%;
+  background:var(--accent);
+  margin:0 auto 30px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:42px;font-weight:700;
+}
+.hero h2{font-size:36px;margin-bottom:16px}
+.hero p{color:var(--muted);max-width:520px;margin:0 auto 32px}
+.center{text-align:center}
+.btn{
+  display:inline-block;
+  padding:16px 28px;
+  background:var(--accent);
+  color:#fff;
+  border-radius:999px;
+  font-weight:600;
+  text-decoration:none;
+}
+.telegram{background:#229ed9;color:#fff}
+.section{padding:60px 20px}
+.section h3{
+  text-align:center;font-size:28px;
+  margin:0 auto 40px;
+  color:var(--accent);font-weight:700;
+  max-width:420px;
+}
+.card{
+  background:#cfe1fe;
+  border-radius:24px;
+  padding:22px;
+  margin-bottom:20px;
+}
+.card h4{margin-bottom:10px;font-weight:600}
+.card p{color:var(--muted);line-height:1.6}
+.table .row{
+  display:flex;justify-content:space-between;
+  padding:14px 0;border-bottom:1px solid #d6def2;
+}
+.footer-btns{
+  display:flex;gap:14px;justify-content:center;
+  margin-top:30px;flex-wrap:wrap;
+}
+.faq-item{cursor:pointer}
+.faq-q{display:flex;justify-content:space-between;font-weight:600}
+.faq-a{display:none;margin-top:12px;color:var(--muted);line-height:1.6}
+.disclaimer{font-size:14px;color:var(--muted);line-height:1.7}
+footer{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Ultra Player</h1>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="privacy.html">Privacy Policy</a>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <div class="badge">Latest Version • Stable</div>
+  <div class="logo">UP</div>
+  <h2>Ultra Player</h2>
+  <p>
+    Ultra Player is a fast and modern video player designed to stream online videos smoothly with a clean and simple interface.
+  </p>
+  <div class="center">
+    <a href="https://play.google.com/store/apps/details?id=com.snapmate" class="btn">
+      Download from Google Play →
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <h3>Why Choose Ultra Player?</h3>
+
+  <div class="card">
+    <h4>🎬 Online Video Streaming</h4>
+    <p>Play online videos instantly with stable performance and smooth playback.</p>
+  </div>
+
+  <div class="card">
+    <h4>⚡ Fast & Lightweight</h4>
+    <p>Optimized to run smoothly even on low-end devices.</p>
+  </div>
+
+  <div class="card">
+    <h4>🛡️ Privacy Friendly</h4>
+    <p>No unnecessary permissions or background tracking.</p>
+  </div>
+</section>
+
+<section class="section">
+  <h3>About Ultra Player</h3>
+
+  <div class="card table">
+    <div class="row"><span>App Name</span><strong>Ultra Player</strong></div>
+    <div class="row"><span>Package</span><strong>com.snapmate</strong></div>
+    <div class="row"><span>Version</span><strong>0.0.5 R</strong></div>
+    <div class="row"><span>File Size</span><strong>~10 MB</strong></div>
+    <div class="row"><span>Platform</span><strong>Android</strong></div>
+    <div class="row"><span>Developer</span><strong>YoMods</strong></div>
+    <div class="row"><span>Last Update</span><strong>2026</strong></div>
+
+    <div class="footer-btns">
+      <a href="#" class="btn telegram">Telegram</a>
+      <a href="https://play.google.com/store/apps/details?id=com.snapmate" class="btn">
+        Google Play →
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h3>FAQs</h3>
+
+  <div class="card faq-item">
+    <div class="faq-q">What is Ultra Player used for? <span>+</span></div>
+    <div class="faq-a">Ultra Player is used to stream and play online videos easily.</div>
+  </div>
+
+  <div class="card faq-item">
+    <div class="faq-q">Does Ultra Player support local videos? <span>+</span></div>
+    <div class="faq-a">Currently, Ultra Player focuses on online videos. Local video support is planned.</div>
+  </div>
+
+  <div class="card faq-item">
+    <div class="faq-q">Is Ultra Player free? <span>+</span></div>
+    <div class="faq-a">Yes, the app is free to download and use.</div>
+  </div>
+
+  <div class="card faq-item">
+    <div class="faq-q">Is the app safe? <span>+</span></div>
+    <div class="faq-a">Yes, Ultra Player follows Google Play policies and modern privacy standards.</div>
+  </div>
+</section>
+
+<section class="section">
+  <h3>Disclaimer</h3>
+  <div class="card disclaimer">
+    Ultra Player does not host any videos. It only provides a video player for publicly available online content.
+  </div>
+</section>
+
+<footer>
+  © 2026 Ultra Player – All rights reserved
+</footer>
+
+<script>
+document.querySelectorAll(".faq-item").forEach(item=>{
+  item.onclick=()=>{
+    const a=item.querySelector(".faq-a");
+    a.style.display = a.style.display==="block" ? "none" : "block";
+  }
+});
+</script>
+
 </body>
 </html>
